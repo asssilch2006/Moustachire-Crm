@@ -601,10 +601,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{
   <button class="nav-tab active" onclick="switchView('v-dashboard',this)">Tableau de bord</button>
   <button class="nav-tab" onclick="switchView('v-pipeline-input',this)">Entrées commerciales</button>
   <button class="nav-tab" onclick="switchView('v-factures',this)">Factures</button>
-  <button class="nav-tab" onclick="switchView('v-marges',this)">Marges par service</button>
-  <button class="nav-tab" onclick="switchView('v-clients-fin',this)">Profils clients</button>
   <button class="nav-tab" onclick="switchView('v-risques',this)">Risques & créances</button>
-  <button class="nav-tab" onclick="switchView('v-innovations',this)">Idées & innovations</button>
 </div>
 
 <!-- ============================================================
@@ -627,14 +624,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{
   </div>
 </div>
 
-<div class="alert-strip">
-  <div class="al-icon">⚠️</div>
-  <div class="al-body">
-    <b>Données commerciales partielles :</b> aucun statut de conversion enregistré sur 1 593 leads.
-    Le CAC et le ROI campagnes sont des estimations jusqu'à adoption complète du CRM.
-    <span style="color:var(--terracotta);cursor:pointer;text-decoration:underline;" onclick="switchView('v-pipeline-input',document.querySelectorAll('.nav-tab')[1])"> → Voir les entrées commerciales</span>
-  </div>
-</div>
+
 
 <!-- KPIs -->
 <div class="kpi-strip">
@@ -705,17 +695,18 @@ button:focus-visible,select:focus-visible,input:focus-visible{
 </div>
 
 <!-- ============================================================
-     VUE 2 — ENTRÉES COMMERCIALES (INPUT FROM COMMERCIAL)
+     VUE 2 — ENTRÉES COMMERCIALES
      ============================================================ -->
 <div class="view" id="v-pipeline-input">
 
 <div class="page-head">
   <div>
-    <h1>Entrées issues du commercial</h1>
-    <div class="sub">Les opportunités gagnées ou en négociation avancée alimentent automatiquement la facturation. Cliquez « Générer facture » pour convertir.</div>
+    <h1>Entrées commerciales</h1>
+    <div class="sub">Opportunités issues du commercial · génération de facture</div>
   </div>
 </div>
 
+<!-- Pipeline feed -->
 <div class="alert-strip green">
   <div class="al-icon">🔗</div>
   <div class="al-body">
@@ -746,6 +737,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{
     <tbody id="pipeline-table-body"></tbody>
   </table>
 </div>
+
 <div class="spacer"></div>
 </div>
 
@@ -837,115 +829,6 @@ button:focus-visible,select:focus-visible,input:focus-visible{
 </div>
 
 <!-- ============================================================
-     VUE 4 — MARGES PAR SERVICE
-     ============================================================ -->
-<div class="view" id="v-marges">
-
-<div class="page-head">
-  <div>
-    <h1>Marge réelle par service</h1>
-    <div class="sub">Revenus · coûts directs · marge brute · marge nette — décomposé par ligne de service</div>
-  </div>
-</div>
-
-<div class="alert-strip slate">
-  <div class="al-icon">💡</div>
-  <div class="al-body">
-    <b>Lecture :</b> la marge brute exclut les charges fixes (loyer, salaires fixes, outils). La marge nette intègre le CAC et la part de frais généraux allouée à chaque service.
-  </div>
-</div>
-
-<div class="chart-grid" style="margin-top:14px;">
-  <div class="chart-card">
-    <div class="chart-title">Marge brute vs nette par service</div>
-    <div class="chart-headline">Comparaison des deux niveaux de marge</div>
-    <div class="chart-wrap lg"><canvas id="chart-margins-compare"></canvas></div>
-    <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--revenue)"></div>Marge brute</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--slate)"></div>Marge nette</div>
-    </div>
-  </div>
-  <div class="chart-card">
-    <div class="chart-title">CA réalisé vs coûts directs</div>
-    <div class="chart-headline">Structure entrées / sorties</div>
-    <div class="chart-wrap lg"><canvas id="chart-revenue-cost"></canvas></div>
-  </div>
-</div>
-
-<div class="table-wrap" style="margin-top:16px;">
-  <div style="padding:14px 16px;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);">Détail par ligne de service</div>
-  <table>
-    <thead>
-      <tr>
-        <th>Service</th>
-        <th>CA HT (DZD)</th>
-        <th>Coûts directs</th>
-        <th>Marge brute</th>
-        <th>CAC alloué</th>
-        <th>Charges fixes</th>
-        <th>Marge nette</th>
-        <th>Tendance</th>
-      </tr>
-    </thead>
-    <tbody id="margin-table-body"></tbody>
-  </table>
-</div>
-
-<!-- Insights -->
-<div class="chart-grid-3" style="margin-top:14px;">
-  <div class="chart-card" style="grid-column:1/-1">
-    <div class="chart-title">Diagnostics automatiques — questions clés</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px;" id="diagnostic-cards"></div>
-  </div>
-</div>
-<div class="spacer"></div>
-</div>
-
-<!-- ============================================================
-     VUE 5 — PROFILS CLIENTS FINANCIERS
-     ============================================================ -->
-<div class="view" id="v-clients-fin">
-
-<div class="page-head">
-  <div>
-    <h1>Profils financiers clients</h1>
-    <div class="sub">LTV · historique de paiement · comportement · risque — alimenté par le pipeline commercial</div>
-  </div>
-</div>
-
-<div class="table-wrap" style="margin-top:16px;">
-  <table>
-    <thead>
-      <tr>
-        <th>Client</th>
-        <th>Service(s)</th>
-        <th>CA total HT</th>
-        <th>Encaissé</th>
-        <th>Créance</th>
-        <th>Délai moyen</th>
-        <th>LTV Score</th>
-        <th>Risque</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="clients-fin-body"></tbody>
-  </table>
-</div>
-
-<div class="chart-grid" style="margin-top:14px;">
-  <div class="chart-card">
-    <div class="chart-title">LTV par client (DZD)</div>
-    <div class="chart-wrap"><canvas id="chart-ltv"></canvas></div>
-  </div>
-  <div class="chart-card">
-    <div class="chart-title">Délai de paiement moyen (jours)</div>
-    <div class="chart-wrap"><canvas id="chart-delay"></canvas></div>
-  </div>
-</div>
-<div class="spacer"></div>
-</div>
-
-<!-- ============================================================
      VUE 6 — RISQUES & CRÉANCES
      ============================================================ -->
 <div class="view" id="v-risques">
@@ -994,49 +877,41 @@ button:focus-visible,select:focus-visible,input:focus-visible{
 </div>
 
 <!-- ============================================================
-     VUE 7 — INNOVATIONS & IDÉES
-     ============================================================ -->
-<div class="view" id="v-innovations">
-
-<div class="page-head">
-  <div>
-    <h1>Idées & innovations pour la finance</h1>
-    <div class="sub">Fonctionnalités innovantes pour améliorer et automatiser la gestion financière de Moustachir — priorisées par impact</div>
-  </div>
-</div>
-
-<div class="ideas-grid" id="ideas-grid"></div>
-<div class="spacer"></div>
-</div>
-
-<!-- ============================================================
      MODAL — NOUVELLE FACTURE
      ============================================================ -->
 <div class="overlay-backdrop" id="overlay-facture">
 <div class="panel wide">
   <button class="panel-close" onclick="closeFacture()">✕ Fermer</button>
   <h3>Nouvelle facture</h3>
-  <div class="panel-sub">Les données client et montant sont pré-remplies depuis l'opportunité commerciale sélectionnée.</div>
+  <div class="panel-sub" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+    <span>Remplissez les informations ci-dessous pour créer une nouvelle facture.</span>
+    <div style="display:flex;gap:8px;">
+      <label style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink);" title="Importer une facture JSON">
+        ↑ Importer
+        <input type="file" id="import-invoice-file" accept=".json" style="display:none;" onchange="importInvoice(this)">
+      </label>
+      <button class="btn-secondary" onclick="downloadInvoice()" style="font-family:'JetBrains Mono',monospace;font-size:11.5px;" title="Télécharger la facture en JSON">↓ Télécharger</button>
+    </div>
+  </div>
 
-  <!-- Source depuis pipeline -->
-  <div style="background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;">Source :</div>
-    <select class="filter-select" id="fac-source" onchange="prefillFromSource()" style="flex:1;background:var(--card);">
-      <option value="">— Opportunité commerciale ou client existant —</option>
-      <option value="saifi">SAIFI Tarek — Rentabilité — 500 000 DZD HT</option>
-      <option value="yakid">Yakid Promotion — COM Corporate — 120 000 DZD HT</option>
-      <option value="toufik">Toufik / ZR Express — Consulting — 450 000 DZD HT</option>
-      <option value="mdi">MDI Algiers — Academy — 200 000 DZD HT</option>
-      <option value="vms">VMS Algeria — Rentabilité — 850 000 DZD HT</option>
-      <option value="manual">→ Saisie manuelle</option>
+  <!-- Sélection client existant -->
+  <div style="background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:4px;display:flex;align-items:center;gap:12px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;">Client existant :</div>
+    <select class="filter-select" id="fac-existing-client" onchange="prefillFromExistingClient()" style="flex:1;background:var(--card);">
+      <option value="">— Sélectionner un client existant (optionnel) —</option>
+      <option value="VMS Algeria">VMS Algeria</option>
+      <option value="SOFITEX">SOFITEX</option>
+      <option value="Jemmy Corp">Jemmy Corp</option>
+      <option value="MDI Algiers">MDI Algiers Business School</option>
+      <option value="Octreopharm">Octreopharm</option>
     </select>
   </div>
 
   <div class="form-section-label">Informations générales</div>
   <div class="form-row third">
-    <div class="field"><label>N° Facture</label><input type="text" id="fac-num" value="INV-2026-046" readonly style="background:var(--paper-2);"></div>
-    <div class="field"><label>Date d'émission</label><input type="date" id="fac-date" value="2026-06-20"></div>
-    <div class="field"><label>Date d'échéance</label><input type="date" id="fac-echeance" value="2026-07-20"></div>
+    <div class="field"><label>N° Facture</label><input type="text" id="fac-num" readonly style="background:var(--paper-2);"></div>
+    <div class="field"><label>Date d'émission</label><input type="date" id="fac-date"></div>
+    <div class="field"><label>Date d'échéance</label><input type="date" id="fac-echeance"></div>
   </div>
   <div class="form-row">
     <div class="field"><label>Client</label><input type="text" id="fac-client" placeholder="Raison sociale ou nom"></div>
@@ -1080,12 +955,17 @@ button:focus-visible,select:focus-visible,input:focus-visible{
   <div class="form-row single">
     <div class="field">
       <label>Notes facture</label>
-      <textarea id="fac-notes" placeholder="Conditions de paiement, références contrat, instructions bancaires…">Virement bancaire sous 30 jours. Référence : [N° Facture] dans l'objet du virement.</textarea>
+      <textarea id="fac-notes" placeholder="Conditions de paiement, références contrat, instructions bancaires…">Conditions de paiement : 30 jours à compter de la date d'émission.
+Règlement par virement bancaire. Mentionner le N° de facture en référence.
+RIB CPA HYDRA : 00400126400016133219
+RIB BDL DAR EL BEIDA : 00500124000000067520
+RIB CPA CHERCHELL : 00400139404012082683</textarea>
     </div>
   </div>
 
   <div class="panel-actions">
     <button class="btn-secondary" onclick="closeFacture()">Annuler</button>
+    <button class="btn-secondary" onclick="printInvoice()" style="display:inline-flex;align-items:center;gap:6px;">🖨 Imprimer</button>
     <button class="btn-secondary" onclick="saveFacture('Brouillon')">Sauvegarder brouillon</button>
     <button class="btn-primary" onclick="saveFacture('Envoyée')">Émettre & envoyer</button>
   </div>
@@ -1570,56 +1450,99 @@ const TAX_MAP = {COM:19,Consulting:19,Academy:19,Rentabilité:0,Idarati:19};
 function openFacture(){
   lineCount = 0;
   document.getElementById('line-items-container').innerHTML='';
-  document.getElementById('fac-source').value='';
   document.getElementById('fac-client').value='';
   document.getElementById('fac-service').value='';
+  const excl = document.getElementById('fac-existing-client');
+  if(excl) excl.value='';
   document.getElementById('rentab-calc-box').style.display='none';
+
+  // Auto N° facture
+  const nextNum = (INVOICES.length + 1).toString().padStart(3,'0');
+  const year = new Date().getFullYear();
+  document.getElementById('fac-num').value = `INV-${year}-${nextNum}`;
+
+  // Today's date + 30 days for échéance
+  const today = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  document.getElementById('fac-date').value = fmt(today);
+  const due = new Date(today); due.setDate(due.getDate()+30);
+  document.getElementById('fac-echeance').value = fmt(due);
+
   addLine();
   updateTotals();
   document.getElementById('overlay-facture').classList.add('show');
 }
 
-function openFactureFromOpp(name, service, value){
-  openFacture();
-  document.getElementById('fac-client').value = name;
-  document.getElementById('fac-service').value = service;
-  if(value>0){
-    const firstHt = document.querySelector('.li-ht');
-    if(firstHt) firstHt.value = value;
-    const firstDesc = document.querySelector('.li-desc');
-    if(firstDesc) firstDesc.value = `Mission ${service} — ${name}`;
-    const firstTva = document.querySelector('.li-tva');
-    if(firstTva) firstTva.value = TAX_MAP[service]||19;
-  }
-  onServiceChange();
-  updateTotals();
-  setTimeout(()=>updateTotals(),50);
-}
 
-function closeFacture(){ document.getElementById('overlay-facture').classList.remove('show'); }
+// ============================================================
+// ENTRÉES COMMERCIALES — saisie manuelle
+// ============================================================
+let commercialEntries = [];
 
-function prefillFromSource(){
-  const v = document.getElementById('fac-source').value;
-  const presets = {
-    saifi:{client:'SAIFI Tarek — Recyclage SA',service:'Rentabilité',ht:500000,desc:'Mission Rentabilité — SAIFI Tarek — 2026'},
-    yakid:{client:'Yakid Promotion Immobilière',service:'COM',ht:120000,desc:'Corporate Website — Yakid Immo'},
-    toufik:{client:'Toufik Oumahou / ZR Express',service:'Consulting',ht:450000,desc:'Mission de Consulting stratégique — ZR Express'},
-    mdi:{client:'MDI Algiers Business School',service:'Academy',ht:200000,desc:'Programme de formation — MDI'},
-    vms:{client:'VMS Algeria',service:'Rentabilité',ht:850000,desc:'Mission Rentabilité — VMS Algeria — Q2 2026'},
+function saveCommercialEntry(){
+  const client = document.getElementById('ce-client').value.trim();
+  if(!client){ showToast('⚠️ Le nom du client est requis'); return; }
+  const entry = {
+    id: Date.now(),
+    client,
+    contact: document.getElementById('ce-contact').value.trim(),
+    tel: document.getElementById('ce-tel').value.trim(),
+    email: document.getElementById('ce-email').value.trim(),
+    service: document.getElementById('ce-service').value,
+    stade: document.getElementById('ce-stade').value,
+    montant: parseFloat(document.getElementById('ce-montant').value)||0,
+    date: document.getElementById('ce-date').value,
+    desc: document.getElementById('ce-desc').value.trim(),
+    commercial: document.getElementById('ce-commercial').value.trim(),
+    canal: document.getElementById('ce-canal').value,
   };
-  const p = presets[v];
-  if(!p) return;
-  document.getElementById('fac-client').value = p.client;
-  document.getElementById('fac-service').value = p.service;
-  onServiceChange();
-  const firstHt = document.querySelector('.li-ht');
-  if(firstHt) firstHt.value = p.ht;
-  const firstDesc = document.querySelector('.li-desc');
-  if(firstDesc) firstDesc.value = p.desc;
-  const firstTva = document.querySelector('.li-tva');
-  if(firstTva) firstTva.value = TAX_MAP[p.service]||19;
-  updateTotals();
+  commercialEntries.unshift(entry);
+  renderCommercialEntries();
+  clearCommercialEntry();
+  showToast('Entrée commerciale enregistrée ✓');
 }
+
+function clearCommercialEntry(){
+  ['ce-client','ce-contact','ce-tel','ce-email','ce-desc','ce-commercial'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  ['ce-service','ce-stade','ce-canal'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.selectedIndex=0;
+  });
+  const montant = document.getElementById('ce-montant'); if(montant) montant.value='';
+  const dateEl = document.getElementById('ce-date');
+  if(dateEl){ const t=new Date(); dateEl.value=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
+}
+
+function deleteCommercialEntry(id){
+  commercialEntries = commercialEntries.filter(e=>e.id!==id);
+  renderCommercialEntries();
+}
+
+function renderCommercialEntries(){
+  const tbody = document.getElementById('commercial-entries-body');
+  if(!tbody) return;
+  if(!commercialEntries.length){
+    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-soft);padding:28px;">Aucune entrée enregistrée pour le moment.</td></tr>';
+    return;
+  }
+  const stadeColors={Prospect:'var(--plum-soft)',Qualification:'var(--amber-soft)',Proposition:'var(--slate-soft)',Négociation:'var(--bordeaux-soft)',Gagné:'var(--olive-soft)'};
+  const stadeText={Prospect:'var(--plum)',Qualification:'#5c4318',Proposition:'var(--slate)',Négociation:'#6b2530',Gagné:'#3d4720'};
+  tbody.innerHTML = commercialEntries.map(e=>`
+    <tr>
+      <td><div style="font-weight:600">${e.client}</div><div style="font-size:11px;color:var(--ink-soft)">${e.contact||'—'}</div></td>
+      <td><span class="svc-tag svc-${(e.service||'').toLowerCase()}">${e.service||'—'}</span></td>
+      <td><span class="status-tag" style="background:${stadeColors[e.stade]||'var(--paper-2)'};color:${stadeText[e.stade]||'var(--ink-soft)'}">${e.stade}</span></td>
+      <td class="mono-num">${e.montant ? e.montant.toLocaleString('fr-DZ')+' DZD' : '—'}</td>
+      <td>${e.commercial||'—'}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:11.5px">${e.date||'—'}</td>
+      <td><button class="btn-bordeaux" style="font-size:10px;padding:4px 9px;" onclick="deleteCommercialEntry(${e.id})">Supprimer</button></td>
+    </tr>
+  `).join('');
+}
+
+
 
 function onServiceChange(){
   const svc = document.getElementById('fac-service').value;
@@ -1700,6 +1623,157 @@ function saveFacture(status){
   showToast(`Facture ${status==='Envoyée'?'émise et envoyée':'sauvegardée en brouillon'} ✓`);
 }
 
+// Client existant → pré-remplissage
+const CLIENT_DATA = {
+  'VMS Algeria':      {service:'Rentabilité', lastHT:850000},
+  'SOFITEX':          {service:'COM',         lastHT:480000},
+  'Jemmy Corp':       {service:'COM',         lastHT:320000},
+  'MDI Algiers':      {service:'Academy',     lastHT:200000},
+  'Octreopharm':      {service:'Consulting',  lastHT:150000},
+};
+
+function prefillFromExistingClient(){
+  const name = document.getElementById('fac-existing-client').value;
+  if(!name) return;
+  const d = CLIENT_DATA[name];
+  if(!d) return;
+  document.getElementById('fac-client').value = name;
+  document.getElementById('fac-service').value = d.service;
+  onServiceChange();
+  showToast(`Client ${name} sélectionné ✓`);
+}
+
+function printInvoice(){
+  const num   = document.getElementById('fac-num').value || '—';
+  const date  = document.getElementById('fac-date').value || '—';
+  const echeance = document.getElementById('fac-echeance').value || '—';
+  const client = document.getElementById('fac-client').value || '—';
+  const service = document.getElementById('fac-service').value || '—';
+  const notes  = document.getElementById('fac-notes').value || '';
+  const totHT  = document.getElementById('tot-ht').textContent;
+  const totTVA = document.getElementById('tot-tva').textContent;
+  const totTTC = document.getElementById('tot-ttc').textContent;
+
+  let linesHTML = '';
+  document.querySelectorAll('.line-item-row').forEach(row=>{
+    const desc = row.querySelector('.li-desc')?.value||'';
+    const qty  = row.querySelector('.li-qty')?.value||1;
+    const ht   = parseFloat(row.querySelector('.li-ht')?.value||0);
+    const tva  = row.querySelector('.li-tva')?.value||19;
+    const ttc  = row.querySelector('.li-total')?.textContent||'—';
+    if(desc||ht) linesHTML += `<tr><td>${desc}</td><td style="text-align:center">${qty}</td><td style="text-align:right">${ht.toLocaleString('fr-DZ')} DZD</td><td style="text-align:center">${tva}%</td><td style="text-align:right">${ttc}</td></tr>`;
+  });
+
+  const win = window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Facture ${num}</title>
+<style>
+  body{font-family:Arial,sans-serif;font-size:13px;color:#1C1B19;margin:40px;}
+  .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;}
+  .logo{font-size:22px;font-weight:700;color:#C4622D;}
+  .logo-sub{font-size:11px;color:#5A5650;margin-top:2px;}
+  .invoice-title{text-align:right;}
+  .invoice-title h1{font-size:24px;font-weight:700;color:#1C1B19;margin:0;}
+  .invoice-title .num{font-family:monospace;font-size:13px;color:#5A5650;}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;padding:16px;background:#FAF8F4;border-radius:8px;}
+  .meta-label{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#5A5650;margin-bottom:3px;}
+  .meta-value{font-weight:600;}
+  table{width:100%;border-collapse:collapse;margin:20px 0;}
+  thead th{background:#1C1B19;color:#fff;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;}
+  tbody td{padding:10px 12px;border-bottom:1px solid #E4DECF;}
+  tbody tr:hover td{background:#FAF8F4;}
+  .totals{margin-left:auto;width:300px;margin-top:8px;}
+  .totals-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #E4DECF;font-size:13px;}
+  .totals-row.grand{font-weight:700;font-size:15px;border-bottom:2px solid #C4622D;color:#C4622D;}
+  .notes{margin-top:32px;padding:16px;background:#FAF8F4;border-radius:8px;font-size:12px;white-space:pre-wrap;line-height:1.6;}
+  .footer{margin-top:40px;font-size:10px;color:#9C9890;border-top:1px solid #E4DECF;padding-top:12px;}
+  @media print{body{margin:20px;}}
+</style></head><body>
+<div class="header">
+  <div><div class="logo">SPA MOUSTACHIR</div><div class="logo-sub">Plateforme de Consulting<br>Cité SAIDI Ahmed CICAD lot 47, BORDJ EL KIFFAN, Alger</div></div>
+  <div class="invoice-title"><h1>FACTURE PROFORMA</h1><div class="num">${num}</div><div style="font-size:12px;margin-top:4px;">Alger, le ${date}</div></div>
+</div>
+<div class="meta">
+  <div><div class="meta-label">Client (Doit)</div><div class="meta-value">${client}</div><div style="font-size:12px;color:#5A5650;margin-top:2px;">Service : ${service}</div></div>
+  <div><div class="meta-label">Échéance</div><div class="meta-value">${echeance}</div></div>
+</div>
+<table>
+  <thead><tr><th>Description</th><th style="text-align:center">Qté</th><th style="text-align:right">Prix HT</th><th style="text-align:center">TVA</th><th style="text-align:right">Total TTC</th></tr></thead>
+  <tbody>${linesHTML||'<tr><td colspan="5" style="color:#9C9890;text-align:center;padding:20px">—</td></tr>'}</tbody>
+</table>
+<div class="totals">
+  <div class="totals-row"><span>Montant HT</span><span>${totHT}</span></div>
+  <div class="totals-row"><span>TVA</span><span>${totTVA}</span></div>
+  <div class="totals-row grand"><span>Total TTC</span><span>${totTTC}</span></div>
+</div>
+${notes?`<div class="notes">${notes}</div>`:''}
+<div class="footer">NIF : 001942052521562 · NIS : 001942220008162 · AI : 16225506033 · RC : 19B0525215 00/16<br>Ce devis peut faire office de bon de commande, sous condition de validation écrite de votre part.</div>
+<script>window.onload=()=>{ window.print(); }<\/script>
+</body></html>`);
+  win.document.close();
+}
+
+function downloadInvoice(){
+  const num = document.getElementById('fac-num').value;
+  const date = document.getElementById('fac-date').value;
+  const echeance = document.getElementById('fac-echeance').value;
+  const client = document.getElementById('fac-client').value;
+  const service = document.getElementById('fac-service').value;
+  const notes = document.getElementById('fac-notes').value;
+  const lines = [];
+  document.querySelectorAll('.line-item-row').forEach(row=>{
+    lines.push({
+      description: row.querySelector('.li-desc')?.value||'',
+      quantite: row.querySelector('.li-qty')?.value||1,
+      prixHT: row.querySelector('.li-ht')?.value||0,
+      tva: row.querySelector('.li-tva')?.value||19,
+    });
+  });
+  const data = {numero:num, date, echeance, client, service, notes, lignes:lines,
+    emetteur:{nom:'SPA MOUSTACHIR',adresse:'Cité SAIDI Ahmed CICAD lot 47, BORDJ EL KIFFAN, Alger',nif:'001942052521562',nis:'001942220008162',rc:'19B0525215 00/16'}};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${num||'Facture'}_${client||'client'}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Facture téléchargée ✓');
+}
+
+function importInvoice(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    try{
+      const d = JSON.parse(e.target.result);
+      if(d.numero) document.getElementById('fac-num').value=d.numero;
+      if(d.date) document.getElementById('fac-date').value=d.date;
+      if(d.echeance) document.getElementById('fac-echeance').value=d.echeance;
+      if(d.client) document.getElementById('fac-client').value=d.client;
+      if(d.service){ document.getElementById('fac-service').value=d.service; onServiceChange(); }
+      if(d.notes) document.getElementById('fac-notes').value=d.notes;
+      if(d.lignes && d.lignes.length){
+        lineCount=0;
+        document.getElementById('line-items-container').innerHTML='';
+        d.lignes.forEach(l=>{ addLine(); const rows=document.querySelectorAll('.line-item-row'); const row=rows[rows.length-1];
+          row.querySelector('.li-desc').value=l.description||'';
+          row.querySelector('.li-qty').value=l.quantite||1;
+          row.querySelector('.li-ht').value=l.prixHT||0;
+          row.querySelector('.li-tva').value=l.tva||19;
+        });
+        updateTotals();
+      }
+      showToast('Facture importée ✓');
+    } catch(err){ showToast('⚠️ Erreur de lecture du fichier JSON'); }
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
 // ============================================================
 // RELANCE MODAL
 // ============================================================
@@ -1734,9 +1808,42 @@ function showToast(msg){
 }
 
 // ============================================================
-// EXPORT
+// EXPORT — téléchargement réel sur l'appareil
 // ============================================================
-function exportData(){ showToast('Export Excel en cours… ✓'); }
+function exportData(){
+  // Build CSV from INVOICES data
+  const headers = ['N° Facture','Client','Service','HT (DZD)','TVA (DZD)','TTC (DZD)','Statut','Date émission','Échéance','Jours retard'];
+  const rows = INVOICES.map(inv => [
+    inv.id,
+    inv.client,
+    inv.service,
+    inv.ht,
+    inv.tva,
+    inv.ttc,
+    inv.statut,
+    inv.date,
+    inv.echeance,
+    inv.retard || 0
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(','))
+    .join('\n');
+
+  const BOM = '\uFEFF'; // UTF-8 BOM for Excel compatibility
+  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  link.href = url;
+  link.download = `Moustachir_Factures_${dateStr}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  showToast('Export CSV téléchargé ✓');
+}
 
 // ============================================================
 // DASHBOARD PERIOD SWITCH
@@ -1759,6 +1866,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   // add initial invoice line
   addLine();
   initDashCharts();
+  // Set today's date on commercial entry form
+  const ceDate = document.getElementById('ce-date');
+  if(ceDate){ const t=new Date(); ceDate.value=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`; }
 });
 
 // Close modals on backdrop click

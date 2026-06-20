@@ -276,14 +276,19 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 
   <div class="filter-bar">
     <span class="fb-label">PÉRIODE</span>
-    <input type="date" id="statsDateFrom" value="2026-01-01">
+    <input type="date" id="statsDateFrom" value="2026-01-01" min="2025-07-01" max="2026-06-19">
     <span style="color:var(--ink-soft);">→</span>
-    <input type="date" id="statsDateTo" value="2026-06-19">
+    <input type="date" id="statsDateTo" value="2026-06-19" min="2025-07-01" max="2026-06-19">
+    <span class="fb-label" style="font-weight:400;text-transform:none;color:var(--ink-soft);">données disponibles : juil. 2025 → juin 2026</span>
     <div class="preset-row">
       <button class="preset-btn" data-range="3">3 mois</button>
       <button class="preset-btn active" data-range="6">6 mois</button>
       <button class="preset-btn" data-range="12">12 mois</button>
     </div>
+  </div>
+
+  <div class="card" id="statsEmptyMsg" style="display:none;margin-bottom:18px;text-align:center;color:var(--ink-soft);font-size:13px;">
+    Aucune donnée disponible pour cette période. Choisissez une plage entre juillet 2025 et juin 2026.
   </div>
 
   <div class="section-label">
@@ -328,7 +333,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 </div><!-- /page -->
 
 <script>
-const DATA = {"commercials": ["Amel B.", "Yacine R.", "Sarah K.", "Mehdi T."], "sectors": ["Tech/Digital", "Retail", "Industrie", "Santé", "Services publics"], "branches": ["Consulting", "COM", "Academy"], "stages": ["founding", "seeking_funding", "existing", "idea_only"], "matrix_sector": {"Amel B.": {"Tech/Digital": 22, "Retail": 18, "Industrie": 18, "Santé": 23, "Services publics": 13}, "Yacine R.": {"Tech/Digital": 17, "Retail": 20, "Industrie": 16, "Santé": 15, "Services publics": 12}, "Sarah K.": {"Tech/Digital": 16, "Retail": 9, "Industrie": 11, "Santé": 11, "Services publics": 5}, "Mehdi T.": {"Tech/Digital": 9, "Retail": 9, "Industrie": 7, "Santé": 7, "Services publics": 3}}, "matrix_branch": {"Amel B.": {"Consulting": 19, "COM": 20, "Academy": 17}, "Yacine R.": {"Consulting": 16, "COM": 19, "Academy": 15}, "Sarah K.": {"Consulting": 11, "COM": 9, "Academy": 11}, "Mehdi T.": {"Consulting": 13, "COM": 9, "Academy": 3}}, "matrix_stage": {"Amel B.": {"founding": 27, "seeking_funding": 24, "existing": 21, "idea_only": 12}, "Yacine R.": {"founding": 21, "seeking_funding": 17, "existing": 19, "idea_only": 10}, "Sarah K.": {"founding": 17, "seeking_funding": 15, "existing": 11, "idea_only": 8}, "Mehdi T.": {"founding": 12, "seeking_funding": 13, "existing": 9, "idea_only": 5}}, "perf": {"Amel B.": {"conversion": 19, "revenue": 2.4, "leads": 68, "dealSize": 186, "meetings": 54, "cycle": 18}, "Yacine R.": {"conversion": 16, "revenue": 1.9, "leads": 54, "dealSize": 154, "meetings": 41, "cycle": 21}, "Sarah K.": {"conversion": 11, "revenue": 1.3, "leads": 71, "dealSize": 121, "meetings": 47, "cycle": 29}, "Mehdi T.": {"conversion": 8, "revenue": 0.8, "leads": 59, "dealSize": 98, "meetings": 33, "cycle": 34}}, "funnel": [{"month": "Jan", "leads": 210, "cpl": 3400, "qualifies": 143, "meetings": 86, "clients": 25, "conversion": 11.8, "ca": 2.1, "marge": 31, "cac": 48}, {"month": "Fév", "leads": 235, "cpl": 3300, "qualifies": 160, "meetings": 96, "clients": 29, "conversion": 12.4, "ca": 2.6, "marge": 32, "cac": 46}, {"month": "Mar", "leads": 260, "cpl": 3150, "qualifies": 177, "meetings": 107, "clients": 34, "conversion": 13.0, "ca": 2.9, "marge": 32.5, "cac": 45}, {"month": "Avr", "leads": 275, "cpl": 3050, "qualifies": 187, "meetings": 113, "clients": 37, "conversion": 13.5, "ca": 3.3, "marge": 33, "cac": 44}, {"month": "Mai", "leads": 298, "cpl": 2980, "qualifies": 203, "meetings": 122, "clients": 41, "conversion": 13.9, "ca": 3.6, "marge": 33.5, "cac": 43}, {"month": "Jun", "leads": 312, "cpl": 2900, "qualifies": 212, "meetings": 128, "clients": 44, "conversion": 14.2, "ca": 3.9, "marge": 34, "cac": 42}], "missions_data": {"Amel B.": {"total": 15, "en_cours": 6, "en_attente": 5, "terminees": 4, "taux_reussite": 92, "reactivite_h": 7.7}, "Yacine R.": {"total": 18, "en_cours": 9, "en_attente": 5, "terminees": 4, "taux_reussite": 84, "reactivite_h": 4.6}, "Sarah K.": {"total": 15, "en_cours": 7, "en_attente": 4, "terminees": 4, "taux_reussite": 83, "reactivite_h": 3.6}, "Mehdi T.": {"total": 11, "en_cours": 5, "en_attente": 2, "terminees": 4, "taux_reussite": 80, "reactivite_h": 8.7}}, "temps_traitement_service": {"Consulting": 18, "COM": 27, "Academy": 12}, "mission_par_service": {"Consulting": 25, "COM": 19, "Academy": 15}, "services": ["Consulting", "COM", "Academy"]};
+const DATA = {"commercials": ["Amel B.", "Yacine R.", "Sarah K.", "Mehdi T."], "sectors": ["Tech/Digital", "Retail", "Industrie", "Santé", "Services publics"], "branches": ["Consulting", "COM", "Academy"], "stages": ["founding", "seeking_funding", "existing", "idea_only"], "matrix_sector": {"Amel B.": {"Tech/Digital": 22, "Retail": 18, "Industrie": 18, "Santé": 23, "Services publics": 13}, "Yacine R.": {"Tech/Digital": 17, "Retail": 20, "Industrie": 16, "Santé": 15, "Services publics": 12}, "Sarah K.": {"Tech/Digital": 16, "Retail": 9, "Industrie": 11, "Santé": 11, "Services publics": 5}, "Mehdi T.": {"Tech/Digital": 9, "Retail": 9, "Industrie": 7, "Santé": 7, "Services publics": 3}}, "matrix_branch": {"Amel B.": {"Consulting": 19, "COM": 20, "Academy": 17}, "Yacine R.": {"Consulting": 16, "COM": 19, "Academy": 15}, "Sarah K.": {"Consulting": 11, "COM": 9, "Academy": 11}, "Mehdi T.": {"Consulting": 13, "COM": 9, "Academy": 3}}, "matrix_stage": {"Amel B.": {"founding": 27, "seeking_funding": 24, "existing": 21, "idea_only": 12}, "Yacine R.": {"founding": 21, "seeking_funding": 17, "existing": 19, "idea_only": 10}, "Sarah K.": {"founding": 17, "seeking_funding": 15, "existing": 11, "idea_only": 8}, "Mehdi T.": {"founding": 12, "seeking_funding": 13, "existing": 9, "idea_only": 5}}, "perf": {"Amel B.": {"conversion": 19, "revenue": 2.4, "leads": 68, "dealSize": 186, "meetings": 54, "cycle": 18}, "Yacine R.": {"conversion": 16, "revenue": 1.9, "leads": 54, "dealSize": 154, "meetings": 41, "cycle": 21}, "Sarah K.": {"conversion": 11, "revenue": 1.3, "leads": 71, "dealSize": 121, "meetings": 47, "cycle": 29}, "Mehdi T.": {"conversion": 8, "revenue": 0.8, "leads": 59, "dealSize": 98, "meetings": 33, "cycle": 34}}, "funnel": [{"month": "Juil", "date": "2025-07-01", "leads": 140, "cpl": 4200, "qualifies": 89, "meetings": 52, "clients": 14, "conversion": 10.0, "ca": 1.1, "marge": 27, "cac": 58}, {"month": "Août", "date": "2025-08-01", "leads": 155, "cpl": 4050, "qualifies": 99, "meetings": 58, "clients": 16, "conversion": 10.3, "ca": 1.3, "marge": 27.5, "cac": 56}, {"month": "Sep", "date": "2025-09-01", "leads": 168, "cpl": 3900, "qualifies": 109, "meetings": 64, "clients": 18, "conversion": 10.7, "ca": 1.5, "marge": 28, "cac": 54}, {"month": "Oct", "date": "2025-10-01", "leads": 182, "cpl": 3750, "qualifies": 121, "meetings": 71, "clients": 20, "conversion": 11.0, "ca": 1.7, "marge": 28.5, "cac": 52}, {"month": "Nov", "date": "2025-11-01", "leads": 195, "cpl": 3600, "qualifies": 132, "meetings": 78, "clients": 22, "conversion": 11.3, "ca": 1.9, "marge": 29.5, "cac": 51}, {"month": "Déc", "date": "2025-12-01", "leads": 202, "cpl": 3500, "qualifies": 138, "meetings": 82, "clients": 23, "conversion": 11.6, "ca": 2.0, "marge": 30, "cac": 50}, {"month": "Jan", "leads": 210, "cpl": 3400, "qualifies": 143, "meetings": 86, "clients": 25, "conversion": 11.8, "ca": 2.1, "marge": 31, "cac": 48, "date": "2026-01-01"}, {"month": "Fév", "leads": 235, "cpl": 3300, "qualifies": 160, "meetings": 96, "clients": 29, "conversion": 12.4, "ca": 2.6, "marge": 32, "cac": 46, "date": "2026-02-01"}, {"month": "Mar", "leads": 260, "cpl": 3150, "qualifies": 177, "meetings": 107, "clients": 34, "conversion": 13.0, "ca": 2.9, "marge": 32.5, "cac": 45, "date": "2026-03-01"}, {"month": "Avr", "leads": 275, "cpl": 3050, "qualifies": 187, "meetings": 113, "clients": 37, "conversion": 13.5, "ca": 3.3, "marge": 33, "cac": 44, "date": "2026-04-01"}, {"month": "Mai", "leads": 298, "cpl": 2980, "qualifies": 203, "meetings": 122, "clients": 41, "conversion": 13.9, "ca": 3.6, "marge": 33.5, "cac": 43, "date": "2026-05-01"}, {"month": "Jun", "leads": 312, "cpl": 2900, "qualifies": 212, "meetings": 128, "clients": 44, "conversion": 14.2, "ca": 3.9, "marge": 34, "cac": 42, "date": "2026-06-01"}], "missions_data": {"Amel B.": {"total": 15, "en_cours": 6, "en_attente": 5, "terminees": 4, "taux_reussite": 92, "reactivite_h": 7.7}, "Yacine R.": {"total": 18, "en_cours": 9, "en_attente": 5, "terminees": 4, "taux_reussite": 84, "reactivite_h": 4.6}, "Sarah K.": {"total": 15, "en_cours": 7, "en_attente": 4, "terminees": 4, "taux_reussite": 83, "reactivite_h": 3.6}, "Mehdi T.": {"total": 11, "en_cours": 5, "en_attente": 2, "terminees": 4, "taux_reussite": 80, "reactivite_h": 8.7}}, "temps_traitement_service": {"Consulting": 18, "COM": 27, "Academy": 12}, "mission_par_service": {"Consulting": 25, "COM": 19, "Academy": 15}, "services": ["Consulting", "COM", "Academy"]};
 
 const inkSoft = '#5A5650';
 const line = '#E4DECF';
@@ -471,14 +476,33 @@ function renderOpsCharts(){
 
 /* ===== STATS TAB ===== */
 let statsCharts = {};
-function renderStats(){
-  renderFunnelMini();
-  renderStatsKpis();
-  renderStatsCharts();
+
+function getFilteredFunnel(){
+  const fromVal = document.getElementById('statsDateFrom').value;
+  const toVal = document.getElementById('statsDateTo').value;
+  if(!fromVal || !toVal) return DATA.funnel;
+  return DATA.funnel.filter(m => m.date >= fromVal && m.date <= toVal);
 }
 
-function renderFunnelMini(){
-  const f = DATA.funnel;
+function renderStats(){
+  const filtered = getFilteredFunnel();
+  const emptyMsg = document.getElementById('statsEmptyMsg');
+  if(filtered.length === 0){
+    emptyMsg.style.display = 'block';
+    document.getElementById('funnelMini').innerHTML = '';
+    document.getElementById('statsKpiGrid').innerHTML = '';
+    Object.values(statsCharts).forEach(c=>c && c.destroy());
+    statsCharts = {};
+    return;
+  }
+  emptyMsg.style.display = 'none';
+  renderFunnelMini(filtered);
+  renderStatsKpis(filtered);
+  renderStatsCharts(filtered);
+}
+
+function renderFunnelMini(f){
+  f = f || DATA.funnel;
   const totals = {
     leads: f.reduce((s,m)=>s+m.leads,0),
     qualifies: f.reduce((s,m)=>s+m.qualifies,0),
@@ -504,8 +528,8 @@ function renderFunnelMini(){
   document.getElementById('funnelMini').innerHTML = html;
 }
 
-function renderStatsKpis(){
-  const f = DATA.funnel;
+function renderStatsKpis(f){
+  f = f || DATA.funnel;
   const totalLeads = f.reduce((s,m)=>s+m.leads,0);
   const totalClients = f.reduce((s,m)=>s+m.clients,0);
   const avgConv = (totalClients/totalLeads*100).toFixed(1);
@@ -532,8 +556,8 @@ function renderStatsKpis(){
   `).join('');
 }
 
-function renderStatsCharts(){
-  const f = DATA.funnel;
+function renderStatsCharts(f){
+  f = f || DATA.funnel;
   const labels = f.map(m=>m.month);
 
   if(statsCharts.leadsCpl) statsCharts.leadsCpl.destroy();
@@ -589,14 +613,21 @@ document.querySelectorAll('.preset-btn').forEach(btn=>{
     btn.classList.add('active');
     const months = parseInt(btn.dataset.range);
     const to = new Date('2026-06-19');
-    const from = new Date(to);
-    from.setMonth(from.getMonth()-months);
+    // Align to month boundaries so the range matches the monthly data buckets exactly
+    const from = new Date(to.getFullYear(), to.getMonth() - (months - 1), 1);
     document.getElementById('statsDateFrom').value = from.toISOString().slice(0,10);
     document.getElementById('statsDateTo').value = to.toISOString().slice(0,10);
-    // NOTE: with only 6 months of simulated data, this preset mainly adjusts the date pickers;
-    // the underlying funnel dataset stays at its available 6-month range.
+    renderStats();
   });
 });
+
+function onStatsDateChange(){
+  // A manual date edit is a custom range — it no longer matches any preset exactly
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  renderStats();
+}
+document.getElementById('statsDateFrom').addEventListener('change', onStatsDateChange);
+document.getElementById('statsDateTo').addEventListener('change', onStatsDateChange);
 
 renderRanking();
 renderOpsKpis();
